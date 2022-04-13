@@ -65,7 +65,7 @@ class Client
      * @param string $apiKey
      * @param string $clientId
      * @param string $clientSecret
-     * @param int $posId
+     * @param string $posId
      * @param bool $testModus = false
      */
     public function __construct(string $apiKey, string $clientId, string $clientSecret, string $posId, bool $testModus = false)
@@ -161,8 +161,10 @@ class Client
     
     /**
      * @param string $endpoint
+     *
+     * @return string
      */
-    private function getUrl(string $endpoint)
+    private function getUrl(string $endpoint): string
     {
         return implode('/' , array_filter([
             self::BASE_HREF,
