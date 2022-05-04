@@ -16,6 +16,7 @@ use DateTime;
 class Client
 {
     const BASE_HREF = 'https://api.povis.nl';
+    const VERSION = 1;
     
     /**
      * Methods
@@ -52,6 +53,11 @@ class Client
     private $testModus;
     
     /**
+     * @var int
+     */
+    private $version;
+    
+    /**
      * @var Token
      */
     private $token;
@@ -67,14 +73,16 @@ class Client
      * @param string $clientSecret
      * @param string $posId
      * @param bool $testModus = false
+     * @param int $version = self::VERSION
      */
-    public function __construct(string $apiKey, string $clientId, string $clientSecret, string $posId, bool $testModus = false)
+    public function __construct(string $apiKey, string $clientId, string $clientSecret, string $posId, bool $testModus = false, int $version = self::VERSION)
     {
         $this->apiKey = $apiKey;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->posId = $posId;
         $this->testModus = $testModus;
+        $this->version = $version;
     }
     
     /**
@@ -168,7 +176,7 @@ class Client
     {
         return implode('/' , array_filter([
             self::BASE_HREF,
-            $this->testModus ? 'test' : null,
+            $this->testModus ? 'test' : 'v'.$this->version,
             $this->posId,
             $endpoint
         ]));
