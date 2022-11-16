@@ -17,7 +17,7 @@ List Attribute Sets
     
     $productAttributeSets = $client->get('productattributesets', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 

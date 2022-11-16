@@ -17,7 +17,7 @@ List all Products
     
     $result = $client->get('products', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 

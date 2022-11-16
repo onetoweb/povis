@@ -17,5 +17,5 @@ Get general information of a system
     
     $result = $client->get('applications', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);

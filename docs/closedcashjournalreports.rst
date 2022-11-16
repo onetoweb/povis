@@ -17,7 +17,7 @@ Get a list of summaries of financial transactions
     
     $result = $client->get('closedcashjournalreports', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 

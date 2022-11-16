@@ -17,7 +17,7 @@ List Floors
     
     $result = $client->get('floors', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 

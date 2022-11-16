@@ -17,7 +17,7 @@ List Customers
     
     $result = $client->get('customers', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 

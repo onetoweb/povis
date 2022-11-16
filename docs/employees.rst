@@ -17,7 +17,7 @@ List Employees
     
     $result = $client->get('employees', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 

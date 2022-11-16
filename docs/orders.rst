@@ -17,7 +17,7 @@ List Orders
     
     $result = $client->get('orders', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 

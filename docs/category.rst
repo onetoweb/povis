@@ -17,7 +17,7 @@ List all Categories
     
     $result = $client->get('categories', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 

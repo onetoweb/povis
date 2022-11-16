@@ -17,7 +17,7 @@ List Tables
     
     $result = $client->get('tables', [
         'page' => 0,
-        'limit' => 50
+        'size' => 50
     ]);
 
 
