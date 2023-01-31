@@ -46,6 +46,10 @@ Setup client
         ];
         
     });
+    
+    // if needeed you can change the pos id
+    $posId = 'pos_id';
+    $client->setPosId($posId);
 
 
 ========

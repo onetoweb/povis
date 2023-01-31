@@ -86,6 +86,18 @@ class Client
     }
     
     /**
+     * @param string $posId
+     * 
+     * @return Client
+     */
+    public function setPosId(string $posId): self
+    {
+        $this->posId = $posId;
+        
+        return $this;
+    }
+    
+    /**
      * @param callable $updateTokenCallback
      * 
      * @return void
@@ -138,7 +150,7 @@ class Client
     /**
      * @param string $endpoint
      * @param array $data = []
-     *
+     * 
      * @return array|null
      */
     public function put(string $endpoint, array $data = []): ?array
@@ -149,7 +161,7 @@ class Client
     /**
      * @param string $endpoint
      * @param array $data = []
-     *
+     * 
      * @return array|null
      */
     public function patch(string $endpoint, array $data = []): ?array
@@ -159,7 +171,7 @@ class Client
     
     /**
      * @param string $endpoint
-     *
+     * 
      * @return array|null
      */
     public function delete(string $endpoint): ?array
@@ -169,7 +181,7 @@ class Client
     
     /**
      * @param string $endpoint
-     *
+     * 
      * @return string
      */
     private function getUrl(string $endpoint): string
