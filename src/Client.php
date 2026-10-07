@@ -5,7 +5,9 @@ namespace Onetoweb\Povis;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Client as GuzzleCLient;
 use Onetoweb\Povis\Token;
+use Onetoweb\Povis\Config\Method;
 use DateTime;
+use Closure;
 
 /**
  * Povis Api Client
@@ -15,57 +17,25 @@ use DateTime;
  */
 class Client
 {
-    const BASE_HREF = 'https://api.povis.nl';
-    const VERSION = 1;
-    
-    /**
-     * Methods
-     */
-    const METHOD_GET = 'GET';
-    const METHOD_POST = 'POST';
-    const METHOD_PUT = 'PUT';
-    const METHOD_PATCH = 'PATCH';
-    const METHOD_DELETE = 'DELETE';
-    
     /**
      * @var string
      */
-    private $apiKey;
+    public const BASE_HREF = 'https://api.povis.nl';
     
     /**
-     * @var string
+     * @var integer
      */
-    private $clientId;
-    
-    /**
-     * @var string
-     */
-    private $clientSecret;
-    
-    /**
-     * @var string
-     */
-    private $posId;
-    
-    /**
-     * @var bool
-     */
-    private $testModus;
-    
-    /**
-     * @var int
-     */
-    private $version;
+    public const VERSION = 1;
     
     /**
      * @var Token
      */
-    private $token;
+    private ?Token $token = null;
     
     /**
-     * @var callable
+     * @var Closure
      */
-    private $updateTokenCallback;
+    private ?Closure $updateTokenCallback = null;
     
     /**
      * @param string $apiKey
@@ -75,14 +45,24 @@ class Client
      * @param bool $testModus = false
      * @param int $version = self::VERSION
      */
-    public function __construct(string $apiKey, string $clientId, string $clientSecret, string $posId, bool $testModus = false, int $version = self::VERSION)
-    {
-        $this->apiKey = $apiKey;
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->posId = $posId;
-        $this->testModus = $testModus;
-        $this->version = $version;
+    public function __construct(
+        
+        #[\SensitiveParameter]
+        private string $apiKey,
+        
+        #[\SensitiveParameter]
+        private string $clientId,
+        
+        #[\SensitiveParameter]
+        private string $clientSecret,
+        
+        #[\SensitiveParameter]
+        private string $posId,
+        
+        private bool $testModus = false,
+        private int $version = self::VERSION
+    ) {
+        
     }
     
     /**
@@ -98,11 +78,11 @@ class Client
     }
     
     /**
-     * @param callable $updateTokenCallback
+     * @param Closure $updateTokenCallback
      * 
      * @return void
      */
-    public function setUpdateTokenCallback(callable $updateTokenCallback): void
+    public function setUpdateTokenCallback(Closure $updateTokenCallback): void
     {
         $this->updateTokenCallback = $updateTokenCallback;
     }
@@ -133,7 +113,7 @@ class Client
      */
     public function get(string $endpoint, array $query = []): ?array
     {
-        return $this->request(self::METHOD_GET, $endpoint, [], $query);
+        return $this->request(Method::GET, $endpoint, [], $query);
     }
     
     /**
@@ -144,7 +124,7 @@ class Client
      */
     public function post(string $endpoint, array $data = []): ?array
     {
-        return $this->request(self::METHOD_POST, $endpoint, $data);
+        return $this->request(Method::POST, $endpoint, $data);
     }
     
     /**
@@ -155,7 +135,7 @@ class Client
      */
     public function put(string $endpoint, array $data = []): ?array
     {
-        return $this->request(self::METHOD_PUT, $endpoint, $data);
+        return $this->request(Method::PUT, $endpoint, $data);
     }
     
     /**
@@ -166,7 +146,7 @@ class Client
      */
     public function patch(string $endpoint, array $data = []): ?array
     {
-        return $this->request(self::METHOD_PATCH, $endpoint, $data);
+        return $this->request(Method::PATCH, $endpoint, $data);
     }
     
     /**
@@ -176,7 +156,7 @@ class Client
      */
     public function delete(string $endpoint): ?array
     {
-        return $this->request(self::METHOD_DELETE, $endpoint);
+        return $this->request(Method::DELETE, $endpoint);
     }
     
     /**
@@ -211,7 +191,7 @@ class Client
             ]
         ];
         
-        $response = (new GuzzleCLient())->request(self::METHOD_POST, 'https://povisapi.auth.eu-central-1.amazoncognito.com/oauth2/token', $options);
+        $response = (new GuzzleCLient())->post('https://povisapi.auth.eu-central-1.amazoncognito.com/oauth2/token', $options);
         
         // get contents
         $contents = $response->getBody()->getContents();
@@ -229,14 +209,14 @@ class Client
     }
     
     /**
-     * @param string $method
+     * @param Method $method
      * @param string $endpoint
      * @param array $data = []
      * @param array $query = []
      * 
      * @return array|null
      */
-    private function request(string $method, string $endpoint, array $data = [], array $query = []): ?array
+    private function request(Method $method, string $endpoint, array $data = [], array $query = []): ?array
     {
         // build options
         $options = [
@@ -266,7 +246,7 @@ class Client
         }
         
         // make request
-        $response = (new GuzzleCLient())->request($method, $this->getUrl($endpoint), $options);
+        $response = (new GuzzleCLient())->request($method->value, $this->getUrl($endpoint), $options);
         
         $contents = $response->getBody()->getContents();
         

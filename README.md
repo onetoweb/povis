@@ -13,3 +13,7 @@ See [Documentation](docs/index.rst)
 ## Api Documention
 
 See [Api Documention](https://povis.nl/api/)
+
+## Change Log
+
+See [Change Log](CHANGELOG.md)
